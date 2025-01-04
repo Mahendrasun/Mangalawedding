@@ -34,4 +34,10 @@ const scripts = () =>
     .on("error", console.error) // Debugging for errors
     .pipe(gulp.dest("dist/js"));
 
+const createPlaceholder = () =>
+  gulp
+    .src("*", { read: false })
+    .pipe(gulp.dest("dist"))
+    .on("end", () => console.log("Placeholder created"));
+
 gulp.task("build", gulp.series(clean, gulp.parallel(styles, scripts)));
