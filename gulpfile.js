@@ -4,25 +4,24 @@ const concat = require("gulp-concat");
 const uglify = require("gulp-uglify");
 
 // Use dynamic import for `del`
+const clean = async () => {
+  const { deleteAsync } = await import("del");
+  return deleteAsync(["dist"]);
+};
+
 const styles = () =>
   gulp
     .src("src/scss/**/*.scss")
-    .pipe(sass({ outputStyle: "compressed" }).on("error", sass.logError))
-    .pipe(gulp.dest("dist/css"))
-    .on("end", () => console.log("Styles task completed"));
+    .pipe(sass({ outputStyle: "compressed" }))
+    .on("error", console.error) // Debugging for errors
+    .pipe(gulp.dest("dist/css"));
 
 const scripts = () =>
   gulp
     .src("src/js/**/*.js")
     .pipe(concat("app.js"))
     .pipe(uglify())
-    .pipe(gulp.dest("dist/js"))
-    .on("end", () => console.log("Scripts task completed"));
-
-const clean = async () => {
-  const { default: del } = await import("del");
-  const deletedPaths = await del(["dist"]);
-  console.log("Deleted files and directories:\n", deletedPaths);
-};
+    .on("error", console.error) // Debugging for errors
+    .pipe(gulp.dest("dist/js"));
 
 gulp.task("build", gulp.series(clean, gulp.parallel(styles, scripts)));
