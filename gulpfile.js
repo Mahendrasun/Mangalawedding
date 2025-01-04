@@ -40,4 +40,7 @@ const createPlaceholder = () =>
     .pipe(gulp.dest("dist"))
     .on("end", () => console.log("Placeholder created"));
 
-gulp.task("build", gulp.series(clean, gulp.parallel(styles, scripts)));
+gulp.task(
+  "build",
+  gulp.series(clean, gulp.parallel(styles, scripts), createPlaceholder)
+);
