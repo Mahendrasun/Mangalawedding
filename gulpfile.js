@@ -13,6 +13,7 @@ const styles = () =>
   gulp
     .src("src/scss/**/*.scss")
     .pipe(sass({ outputStyle: "compressed" }))
+    .on("error", console.error) // Debugging for errors
     .pipe(gulp.dest("dist/css"));
 
 const scripts = () =>
@@ -20,6 +21,7 @@ const scripts = () =>
     .src("src/js/**/*.js")
     .pipe(concat("app.js"))
     .pipe(uglify())
+    .on("error", console.error) // Debugging for errors
     .pipe(gulp.dest("dist/js"));
 
 gulp.task("build", gulp.series(clean, gulp.parallel(styles, scripts)));
