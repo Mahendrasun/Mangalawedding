@@ -9,6 +9,16 @@ const clean = async () => {
   return deleteAsync(["dist"]);
 };
 
+const ensureDistExists = (done) => {
+  const fs = require("fs");
+  const path = "dist";
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path);
+    console.log("Created 'dist' directory");
+  }
+  done();
+};
+
 const styles = () =>
   gulp
     .src("src/scss/**/*.scss")
