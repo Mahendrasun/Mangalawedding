@@ -1,16 +1,20 @@
-import del from "del";
-import gulp from "gulp";
-import sass from "gulp-sass";
-import concat from "gulp-concat";
-import uglify from "gulp-uglify";
+const gulp = require("gulp");
+const sass = require("gulp-sass")(require("sass")); // Ensure compatibility with gulp-sass
+const concat = require("gulp-concat");
+const uglify = require("gulp-uglify");
 
-// Example tasks
-const clean = () => del(["dist"]);
+// Use dynamic import for `del`
+const clean = async () => {
+  const { deleteAsync } = await import("del");
+  return deleteAsync(["dist"]);
+};
+
 const styles = () =>
   gulp
     .src("src/scss/**/*.scss")
     .pipe(sass({ outputStyle: "compressed" }))
     .pipe(gulp.dest("dist/css"));
+
 const scripts = () =>
   gulp
     .src("src/js/**/*.js")
@@ -18,4 +22,4 @@ const scripts = () =>
     .pipe(uglify())
     .pipe(gulp.dest("dist/js"));
 
-export const build = gulp.series(clean, gulp.parallel(styles, scripts));
+gulp.task("build", gulp.series(clean, gulp.parallel(styles, scripts)));
